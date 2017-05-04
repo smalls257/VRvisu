@@ -6,7 +6,7 @@
 -->
 Current data visualization techniques rely on two-dimensional spaces to relay information. As the amount of data gets larger and more complex, these techniques tend to become less useful. VRvisu attempts to solve this problem by visualizing data in three-dimensional space using virtual reality (VR). By leveraging VR, this program currently generates two visualizations. They include, a 3D scatterplot of a tumor dataset and a clustering visualization of related genes.
 
-Please Note: VRvisu is currently being prepped for upload. 
+### Please Note: VRvisu is currently being prepped for upload. Features may not be avaialable.
 
 ### Hardware Requirements
 
