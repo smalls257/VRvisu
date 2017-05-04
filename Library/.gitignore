@@ -1,0 +1,49 @@
+*_name_S*
+
+# Output directories
+obj/
+bin/
+/bin/
+/Stage
+/Packages
+/.vscode
+
+#Backup files
+*.bak
+
+# Temporary VS files
+*.suo
+*.csproj.user
+*.wixproj.user
+*.pidb
+*.db
+*.opendb
+*.lock.json
+*.nuget.targets
+
+# Visual Studio 2015 cache/options directory
+.vs/
+
+# Generated files
+BuildInfo.Generated.cs
+CurrentVersion.Generated.cs
+
+TestResult.xml
+Solutions/TestResults/
+Runtime/Samples/Hosting/Scenarios/bin/
+
+# TODO - testing scripts should not create these files
+External.LCA_RESTRICTED/Languages/IronPython/27/Lib/@test_*
+
+# created by CPython tests
+External.LCA_RESTRICTED/Languages/IronPython/27/Lib/lib2to3/Grammar*.pickle
+External.LCA_RESTRICTED/Languages/IronPython/27/Lib/lib2to3/PatternGrammar*.pickle
+
+# created by side by side tests
+Languages/IronPython/Tests/compat/*.log
+Languages/IronPython/Tests/compat/*.pyc
+Languages/IronPython/Tests/compat/*/*.pyc
+Languages/IronPython/Tests/compat/sbs_library.dll
+Languages/IronPython/Tests/compat/tempfile.txt
+Languages/IronPython/Tests/Tools/stdmodules.py.stdout.log
+Languages/IronPython/Tests/test_data.gz

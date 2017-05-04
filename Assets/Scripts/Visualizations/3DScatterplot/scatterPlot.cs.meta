@@ -1,0 +1,18 @@
+fileFormatVersion: 2
+guid: 4e21f9e118d272d4c9356c8e86ba9aa7
+timeCreated: 1493920892
+licenseType: Free
+MonoImporter:
+  serializedVersion: 2
+  defaultReferences:
+  - fileProcessor: {fileID: 1129715724601402, guid: fcb2e6a8861c0334287b04b7d09a0a95,
+      type: 2}
+  - basicGraph: {fileID: 1886514278810776, guid: db1786fdbb0fc724c890c7c0f62ce516,
+      type: 2}
+  - scaleLines: {fileID: 1238015177989196, guid: 05ff294008c04074aa2bca2159cb50e7,
+      type: 2}
+  executionOrder: 0
+  icon: {instanceID: 0}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
