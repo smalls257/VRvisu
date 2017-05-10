@@ -39,10 +39,10 @@ public class fileProcessor : MonoBehaviour {
 
 
     //TODO: REMOVE DEFAULT FILEPATH
-    public DataTable createDataTableFromFile(params string[] columnStrings)
+    public DataTable createDataTableFromFile(string filePath)
     {
         IWorkbook workbook;
-        using (FileStream stream = new FileStream("D:\\Brainsssss\\test2.xls", FileMode.Open, FileAccess.Read))
+        using (FileStream stream = new FileStream(filePath, FileMode.Open, FileAccess.Read))
         {
             workbook = new HSSFWorkbook(stream);
         }
@@ -55,12 +55,12 @@ public class fileProcessor : MonoBehaviour {
         List<int> indexesOfHeaders = new List<int>();
         foreach (ICell headerCell in headerRow)
         {
-            if (columnStrings.Contains(headerCell.ToString()))
-            {
+            //if (columnStrings.Contains(headerCell.ToString()))
+            //{
                 dt.Columns.Add(headerCell.ToString());
                 indexesOfHeaders.Add(headerCell.ColumnIndex);
                 
-            }
+          //  }
         }
 
         // write the rest
@@ -92,7 +92,7 @@ public class fileProcessor : MonoBehaviour {
             dataRow.ItemArray = valueArr.ToArray();
             dt.Rows.Add(dataRow);
         }
-
+        exportDataTableToCSV(dt);
         return dt;
     }
 

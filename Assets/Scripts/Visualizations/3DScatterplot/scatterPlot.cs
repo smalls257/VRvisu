@@ -3,33 +3,52 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Data;
 using System.IO;
+using System.Runtime.Serialization.Formatters.Binary;
 using Assets.Scripts;
 using Assets.Scripts.Visualizations;
 using UnityEngine;
+using UnityEngine.UI;
 
+[System.Serializable]
 public class scatterPlot : Visualization, iGraphable
 {
     private GameObject fileProc;
-    private GameObject basicGraph;
+   // private GameObject basicGraph;
     private GameObject scaleLines;
     private GameObject lineLabel;
     private GameObject graph;
+    private GameObject dataPoint;
 
     private Vector3 graphSize;
     private Vector3 graphPosition;
 
     private fileProcessor srcFileProcessor;
-    private DataTable data;
+    [SerializeField]
+    public DataTable data;
 
-  
+    public graphSaveData SaveData = new graphSaveData();
+    public string title = "";
+
+    public string xAxis = "";
+    public string yAxis = "";
+    public string zAxis = "";
+
+    public Queue<string> AxisQueue;
+    public string filePath = "";
+
+   // private List<string> dataTableHeaders
+    void Start()
+    {
+        createShell();
+    }
     public void createShell()
     {
-        basicGraph = Resources.Load("basicGraph") as GameObject;
+       // basicGraph = Resources.Load("basicGraph") as GameObject;
         scaleLines = Resources.Load("scaleLine") as GameObject;
         lineLabel = Resources.Load("lineLabel") as GameObject;
         
 
-        graph = Instantiate(basicGraph, new Vector3(0, 1, 0), Quaternion.identity);
+        graph = transform.gameObject;
         Debug.Log("!!!!!graphGuiRan!");
         //Set size and position of the graph plane
         graphSize = graph.GetComponent<Collider>().bounds.size;
@@ -60,33 +79,30 @@ public class scatterPlot : Visualization, iGraphable
         xAxis.name = "xAxis";
         xAxis.transform.localScale = new Vector3(xAxis.transform.localScale.x, xAxis.transform.localScale.y, graphSize.x);
 
-        plotData();
+        //plotData();
 
         //createScaleLines();
     }
 
 
-    //TODO:REMOVE HARDCODED FILEPATH, ADD CHECKS FOR CORRECT DATA TYPES
-    public void plotData()
+    public void createDataTable()
     {
         fileProc = Resources.Load("FileProcessor") as GameObject;
         srcFileProcessor = fileProc.GetComponent<fileProcessor>();
 
-        string[] cols = new string[3];
-        cols[0] = "donor_id";
-        cols[1] = "age_in_years";
-        cols[2] = "expression_energy_le";
-
+        
         //Create dataTable and get the dataTypes
-        data = srcFileProcessor.createDataTableFromFile(cols);
+        data = srcFileProcessor.createDataTableFromFile(filePath);
         Dictionary<string, string> dataTypesDictionary = data.determineDataTypes();
 
-        createScaleLines(5, cols);
+       // createScaleLines(5, axisStrings);
     }
 
     public void reloadVisualization()
     {
-        throw new NotImplementedException();
+         name = SaveData.name ;
+         this.transform.position = SaveData.position;
+         this.transform.rotation = SaveData.rotation;
     }
 
     public void resizeVisualization()
@@ -96,7 +112,7 @@ public class scatterPlot : Visualization, iGraphable
 
     public void saveVisualization()
     {
-        throw new NotImplementedException();
+     
     }
 
     public void selectVisualization()
@@ -109,21 +125,26 @@ public class scatterPlot : Visualization, iGraphable
 
     private void adjustTitles(params string[] colNameStrings)
     {
-                var Xtext = graph.transform.Find("X-Axis");
-                Xtext.GetComponent<TextMesh>().text = colNameStrings[0];
-                var Ytext = graph.transform.Find("Y-Axis");
-                Ytext.GetComponent<TextMesh>().text = colNameStrings[1];
+                var Xtext = graph.transform.FindChild("Canvas").FindChild("X-Axis");
+                Xtext.GetComponent<Text>().text = colNameStrings[0];
+                var Ytext = graph.transform.FindChild("Canvas").FindChild("Y-Axis");
+                Ytext.GetComponent<Text>().text = colNameStrings[1];
         
-                var Ztext = graph.transform.Find("Z-Axis");
-                Ztext.GetComponent<TextMesh>().text = colNameStrings[2];
+                var Ztext = graph.transform.FindChild("Canvas").FindChild("Z-Axis");
+                Ztext.GetComponent<Text>().text = colNameStrings[2];
         
-                var title = graph.transform.Find("Title");
-                title.GetComponent<TextMesh>().text = "VRvisu - IvyGap Study";
-    }
-    private void createScaleLines(int ticks, params string[] colNameStrings)
-    {
+                var title = graph.transform.FindChild("Canvas").FindChild("Title");
+                title.GetComponent<Text>().text = "VRvisu - IvyGap Study";
 
-     
+    }
+    public void createScaleLines()
+    {
+        int ticks = (int) transform.localScale.x * 5;
+        string[] colNameStrings = new string[3];
+        colNameStrings[0] = xAxis;
+        colNameStrings[1] = yAxis;
+        colNameStrings[2] = zAxis;
+
         adjustTitles(colNameStrings);
 
         //set needed variables
@@ -437,22 +458,24 @@ public class scatterPlot : Visualization, iGraphable
         File.WriteAllText("test.csv", csvData);
 
 
-        //make a counter for the inner parts of loop, also helps match models/meshes
+        //make a counter for the inner parts of loop, also helps match models/meshes and creates dataWindow
+        dataPoint = Resources.Load("DataPoint") as GameObject;
         int i = 0;
         foreach (Vector3 item in positions)
         {
 
             GameObject newthing =
-                Instantiate(GameObject.CreatePrimitive(PrimitiveType.Sphere),
+                Instantiate(dataPoint,
                     new Vector3(item.z + pointLoc.x, item.y, item.x + pointLoc.z), Quaternion.identity,
                     emptyObject.transform) as GameObject;
 
             newthing.name = "plotPoint " + i.ToString();
 
-            newthing.transform.localScale = new Vector3(.1f, .1f, .1f);
-
+            Utilities.createDataWindow(data, newthing, i);
             i++;
         }
-
+        Debug.Log(i);
     }
 }
+
+

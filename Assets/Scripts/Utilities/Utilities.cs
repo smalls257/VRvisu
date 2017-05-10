@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Data;
 using UnityEngine;
+using UnityEngine.UI;
 
 
 public class Utilities : MonoBehaviour {
@@ -66,5 +68,30 @@ public class Utilities : MonoBehaviour {
         }
 
         return niceFraction * pow;
+    }
+
+    public static void createDataWindow(DataTable data, GameObject dataPoint, int dataRowNumber)
+    {
+        //get the names and values from the dataRow
+        string windowString = "";
+        int i = 0;
+        foreach (var item in data.Rows[dataRowNumber].ItemArray)
+        {
+            Debug.Log(data.Columns[i].ColumnName + ": "+ item);
+            windowString += data.Columns[i].ColumnName + ": " + item + "\n";
+            i++;
+        }
+
+        
+        GameObject dataWindow = Instantiate(Resources.Load("DataWindow") as GameObject,new Vector3(0,0,0), Quaternion.identity, dataPoint.transform);
+
+        //set text and tweak the settings to look nice
+        dataWindow.GetComponentInChildren<Text>().text = windowString;
+        dataWindow.transform.localScale *= 10;
+        dataWindow.transform.localPosition = new Vector3(7.73f,0,0);
+        dataWindow.transform.rotation = new Quaternion(0,180,0,0);
+
+        //auto-disables, a trigger collision should enable it
+        dataWindow.SetActiveRecursively(false);
     }
 }
